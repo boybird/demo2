@@ -1,2 +1,9 @@
 ### users
-GET http://localhost:8080/api/users
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+    "page":1,
+    "num":2,
+    "name":"7516"
+}
