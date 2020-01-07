@@ -10,14 +10,14 @@ fn esteblish_connection() -> r2d2::Pool<ConnectionManager<MysqlConnection>> {
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let _ = dotenv::dotenv();
+    let pool = esteblish_connection();
 
     HttpServer::new(move || {
         // let generated = generate();
-        let pool = esteblish_connection();
 
         App::new()
             // data
-            .data(pool)
+            .data(pool.clone())
             // routes
             .service(entries::home::index)
         // .service(actix_web_static_files::ResourceFiles::new("", generated))
