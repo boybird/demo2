@@ -1,10 +1,13 @@
 // include!(concat!(env!("OUT_DIR"), "/generated.rs"));
+// pub type MysqlPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
 
-fn esteblish_connection() -> r2d2::Pool<ConnectionManager<MysqlConnection>> {
+pub type MysqlPool = diesel::r2d2::Pool<ConnectionManager<MysqlConnection>>;
+
+fn esteblish_connection() -> MysqlPool {
     let db_url: String = std::env::var("DATABASE_URL").expect("请设置数据库链接");
     let db_manager = ConnectionManager::<MysqlConnection>::new(db_url);
 
-    r2d2::Pool::new(db_manager).expect("Failed to create pool")
+    diesel::r2d2::Pool::new(db_manager).expect("Failed to create pool")
 }
 
 #[actix_rt::main]
@@ -52,3 +55,4 @@ mod entries;
 mod error;
 mod middleware;
 mod schema;
+mod models;

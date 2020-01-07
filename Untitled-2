@@ -1,0 +1,6 @@
+
+
+
+
+SELECT wu.nickname,wp.body,wp.total_fee,wp.complete_flag,wp.out_trade_no,wp.pay_time,wp.create_time,wp.source,wu.unionid FROM wx_pay_order_native wp INNER JOIN wx_web_userinfo wu on wu.unionid=wp.unionid WHERE wp.body IN ('VIP卡','SVIP卡','升级SVIP') AND wp.obtain_app_vip_way = 1 ORDER BY wp.create_time desc LIMIT 0,20;
+SELECT COUNT(*) AS tp_count FROM wx_pay_order_native wp INNER JOIN wx_web_userinfo wu on wu.unionid=wp.unionid WHERE wp.body IN ('VIP卡','SVIP卡','升级SVIP') AND wp.obtain_app_vip_way = 1;

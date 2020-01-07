@@ -18,7 +18,7 @@ dotenv = "0.15"
 # lazy_static = "1.4"
 
 diesel = {version = "1.4", features = ["mysql","r2d2"]}
-r2d2="0.8"
+# r2d2="0.8"
 
 [build-dependencies]
 actix-web-static-files = "0.3"
