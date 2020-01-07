@@ -8,9 +8,8 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         // let generated = generate();
-        App::new()
-            .service(entries::home::index)
-            // .service(actix_web_static_files::ResourceFiles::new("", generated))
+        App::new().service(entries::home::index)
+        // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
     .bind("127.0.0.1:8080")?
     .run()
