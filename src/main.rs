@@ -1,4 +1,4 @@
-include!(concat!(env!("OUT_DIR"), "/generated.rs"));
+// include!(concat!(env!("OUT_DIR"), "/generated.rs"));
 
 fn esteblish_connection() {}
 
@@ -7,10 +7,10 @@ async fn main() -> std::io::Result<()> {
     esteblish_connection();
 
     HttpServer::new(move || {
-        let generated = generate();
+        // let generated = generate();
         App::new()
             .service(entries::home::index)
-            .service(actix_web_static_files::ResourceFiles::new("", generated))
+            // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
     .bind("127.0.0.1:8080")?
     .run()
@@ -34,8 +34,8 @@ use actix_web::{App, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2;
 
-use actix_web_static_files;
-use std::collections::HashMap;
+// use actix_web_static_files;
+// use std::collections::HashMap;
 
 mod entries;
 mod error;
