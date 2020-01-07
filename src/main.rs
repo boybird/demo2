@@ -1,3 +1,4 @@
+#![feature(type_name_of_val)]
 // include!(concat!(env!("OUT_DIR"), "/generated.rs"));
 // pub type MysqlPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
 
@@ -23,6 +24,7 @@ async fn main() -> std::io::Result<()> {
             .data(pool.clone())
             // routes
             .service(entries::home::index)
+            .service(entries::user::index)
         // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
     .bind(std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned()))?
@@ -31,12 +33,12 @@ async fn main() -> std::io::Result<()> {
 }
 
 // lazy_static! {
-    // static ref _ENV: () = {
-        // let _ = dotenv::dotenv();
-    // };
-    // static ref DATABASE_URL: String = std::env::var("DATABASE_URL").expect("请设置数据库链接");
-    // static ref HOST_PORT: String =        std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned());
-    // static ref DB_POOL: r2d2::Pool<diesel::r2d2::ConnectionManager<MysqlConnection>> =
+// static ref _ENV: () = {
+// let _ = dotenv::dotenv();
+// };
+// static ref DATABASE_URL: String = std::env::var("DATABASE_URL").expect("请设置数据库链接");
+// static ref HOST_PORT: String =        std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned());
+// static ref DB_POOL: r2d2::Pool<diesel::r2d2::ConnectionManager<MysqlConnection>> =
 
 // }
 
@@ -54,5 +56,5 @@ use diesel::r2d2::ConnectionManager;
 mod entries;
 mod error;
 mod middleware;
-mod schema;
 mod models;
+mod schema;
