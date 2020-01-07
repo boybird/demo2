@@ -3,3 +3,4 @@
 **/*.rs.bk
 **/node_modules
 **/build
+Cargo.lock
