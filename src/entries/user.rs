@@ -11,7 +11,7 @@ async fn index(db: Data<MysqlPool>, req: Json<UserList>) -> impl Responder {
     let conn = db.get().unwrap();
     let offset = (req.page - 1) * req.num;
 
-    let limited = users.limit(req.num).offset(req.num);
+    let limited = users.limit(req.num).offset(offset);
     let data;
     let q_name;
     if req.name.is_some() && {
@@ -21,12 +21,10 @@ async fn index(db: Data<MysqlPool>, req: Json<UserList>) -> impl Responder {
         let q_name = req.name.as_ref().unwrap();
         data = limited
             .filter(name.like(format!("%{}%", q_name)))
-            .offset(offset)
             .load::<User>(&conn)
             .expect("error fetch data");
     } else {
         data = limited
-            .offset(offset)
             .load::<User>(&conn)
             .expect("error fetch data");
     }
@@ -34,7 +32,7 @@ async fn index(db: Data<MysqlPool>, req: Json<UserList>) -> impl Responder {
 }
 
 use actix_web::{
-    get, post,
+    post,
     web::{Data, Json},
     Responder,
 };
