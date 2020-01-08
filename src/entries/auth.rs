@@ -40,7 +40,6 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         .get_result::<UserModel>(&conn)
         .expect("error find user");
 
-    let header = json!({});
     let secret = dotenv::var("secret").unwrap_or("secret123".to_owned());
     let p1 = json!(1);
     let header = json!({});
