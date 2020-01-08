@@ -24,9 +24,7 @@ async fn index(db: Data<MysqlPool>, req: Json<UserList>) -> impl Responder {
             .load::<User>(&conn)
             .expect("error fetch data");
     } else {
-        data = limited
-            .load::<User>(&conn)
-            .expect("error fetch data");
+        data = limited.load::<User>(&conn).expect("error fetch data");
     }
     Json(data)
 }

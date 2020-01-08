@@ -12,6 +12,8 @@ actix-rt = "1.0"
 actix-web-static-files = "0.3"
 openssl = { version = "0.10", features = ["v110"] }
 
+bcrypt = "0.6"
+
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 frank_jwt = "3.1"

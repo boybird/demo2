@@ -53,6 +53,8 @@ async fn main() -> std::io::Result<()> {
 
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate serde_json;
 // #[macro_use]
 // extern crate lazy_static;
 use actix_web::{App, HttpServer};
