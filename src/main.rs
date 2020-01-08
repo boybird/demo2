@@ -15,6 +15,15 @@ fn esteblish_connection() -> MysqlPool {
 async fn main() -> std::io::Result<()> {
     let _ = dotenv::dotenv();
     let pool = esteblish_connection();
+    let ssl_key = std::env::var("SSL_KEY_PATH").unwrap_or("key.pm".to_owned());
+    let ssl_cert = std::env::var("SSL_CERT_PATH").unwrap_or("cert.pem".to_owned());
+    //println!("{}, {}", ssl_key,ssl_cert);
+    // return Ok(());
+    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    builder
+        .set_private_key_file(ssl_key, SslFiletype::PEM)
+        .unwrap();
+    builder.set_certificate_chain_file(ssl_cert).unwrap();
 
     HttpServer::new(move || {
         // let generated = generate();
@@ -27,7 +36,8 @@ async fn main() -> std::io::Result<()> {
             .service(entries::user::index)
         // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
-    .bind(std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned()))?
+    //.bind(std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned()))?
+    .bind_openssl("127.0.0.1:8080", builder)?
     .run()
     .await
 }
@@ -47,6 +57,8 @@ extern crate diesel;
 // #[macro_use]
 // extern crate lazy_static;
 use actix_web::{App, HttpServer};
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
 

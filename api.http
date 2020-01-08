@@ -1,5 +1,5 @@
 ### users
-POST http://localhost:8080/api/users
+POST https://localhost:8080/api/users
 Content-Type: application/json
 
 {
