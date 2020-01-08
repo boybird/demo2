@@ -4,7 +4,7 @@
 pub struct Register {
     name: String,
     email: String,
-    // #[serde(skip_serializing)]
+    #[serde(skip_serializing)]
     password: String,
 }
 

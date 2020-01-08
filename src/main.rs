@@ -33,6 +33,8 @@ async fn main() -> std::io::Result<()> {
             // routes
             .service(entries::home::index)
             .service(entries::user::index)
+            .service(entries::auth::register)
+            .service(entries::auth::login)
         // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
     //.bind(std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned()))?
