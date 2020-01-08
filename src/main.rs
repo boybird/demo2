@@ -17,8 +17,7 @@ async fn main() -> std::io::Result<()> {
     let pool = esteblish_connection();
     let ssl_key = std::env::var("SSL_KEY_PATH").unwrap_or("key.pm".to_owned());
     let ssl_cert = std::env::var("SSL_CERT_PATH").unwrap_or("cert.pem".to_owned());
-    //println!("{}, {}", ssl_key,ssl_cert);
-    // return Ok(());
+
     let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
     builder
         .set_private_key_file(ssl_key, SslFiletype::PEM)
