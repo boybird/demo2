@@ -26,8 +26,9 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         // let generated = generate();
-
+        let jwt_auth = JwtAuth::new();
         App::new()
+            .wrap(jwt_auth)
             // data
             .data(pool.clone())
             // routes
@@ -64,6 +65,8 @@ use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
+
+use middleware::JwtAuth;
 
 // use actix_web_static_files;
 // use std::collections::HashMap;
