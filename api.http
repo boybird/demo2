@@ -4,6 +4,7 @@ GET https://localhost:8080/api/index
 ### users
 POST https://localhost:8080/api/users
 Content-Type: application/json
+Authentication: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.Mg.ya8OU8cSS9oSB9x4JVUDoTqGC6F8HYbruK5rq8wmMAY
 
 {
     "page":1,

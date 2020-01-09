@@ -18,7 +18,6 @@ async fn register(db: Data<MysqlPool>, mut req: Json<Register>) -> impl Responde
         .values(&req.0)
         .execute(&conn)
         .expect("Error saving new post");
-    
 
     Json(req.0)
 }
@@ -41,7 +40,8 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         .get_result::<UserModel>(&conn)
         .expect("error find user");
 
-    let secret = dotenv::var("secret").unwrap_or("secret123".to_owned());
+    // let secret = dotenv::var("secret").unwrap_or("secret123".to_owned());
+    let secret = JWT_SECRET.clone();
     let p1 = json!(user.id);
     let header = json!({});
     let jwt1 = encode(header, &secret, &p1, Algorithm::HS256).unwrap();
@@ -50,21 +50,19 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         println!("登录成功")
     }
 
-    Json(
-        json!(
-            {
-                "access_token":jwt1,
-                "token_type": "bearer",
-                "expires_in": 3600
-            }
-        )
-    )
-
+    Json(json!(
+        {
+            "access_token":jwt1,
+            "token_type": "bearer",
+            "expires_in": 3600
+        }
+    ))
 }
 
 use crate::models::user::User as UserModel;
 use crate::schema::users;
 use crate::MysqlPool;
+use crate::JWT_SECRET;
 use actix_web::{
     post,
     web::{Data, Json},

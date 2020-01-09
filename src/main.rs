@@ -3,6 +3,10 @@
 // pub type MysqlPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
 
 pub type MysqlPool = diesel::r2d2::Pool<ConnectionManager<MysqlConnection>>;
+// TODO maybe lazy static here
+lazy_static! {
+    pub static ref JWT_SECRET: String = String::from("jwt123");
+}
 
 fn esteblish_connection() -> MysqlPool {
     let db_url: String = std::env::var("DATABASE_URL").expect("请设置数据库链接");
@@ -58,8 +62,8 @@ async fn main() -> std::io::Result<()> {
 extern crate diesel;
 #[macro_use]
 extern crate serde_json;
-// #[macro_use]
-// extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 use actix_web::{App, HttpServer};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 

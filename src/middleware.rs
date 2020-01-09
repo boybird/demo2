@@ -1,12 +1,3 @@
-
-use std::pin::Pin;
-use std::task::{Context, Poll};
-
-use actix_service::{Service, Transform};
-use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
-use futures::future::{ok, Ready};
-use futures::Future;
-
 // There are two steps in middleware processing.
 // 1. Middleware initialization, middleware factory gets called with
 //    next service in chain as parameter.
@@ -60,11 +51,37 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        println!("Hi from start. You requested: {}", req.path());
-        println!("{:?}", req.headers());
+        // use actix_http::http::HeaderMap;
+        let user_id;
+        if req.path().starts_with("/api/")
+            && !req.path().starts_with("/api/auth")
+            && !req.path().starts_with("/api/public")
+        {
+            let auth = req.headers().get("Authentication");
+            // let authed;
+            user_id = if auth.is_none() {
+                0
+            } else {
+                use crate::JWT_SECRET;
+                let secret = JWT_SECRET.clone();
+                let auth = auth.unwrap().to_str().unwrap();
+                decode(
+                    auth,
+                    &secret,
+                    Algorithm::HS256,
+                    // TODO remove dangerous validate
+                    &ValidationOptions::dangerous(),
+                )
+                .map(|(_, num)| num.as_i64().unwrap_or(0))
+                .unwrap_or(0)
+            };
+        }else{
+            user_id = 0;   
+        }
+        println!("uid: {} authed", user_id);
 
         let fut = self.service.call(req);
-
+        println!("service call completed");
         Box::pin(async move {
             let res = fut.await?;
 
@@ -73,3 +90,14 @@ where
         })
     }
 }
+
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+use actix_service::{Service, Transform};
+use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
+use frank_jwt::{decode, Algorithm, ValidationOptions};
+use futures::future::{ok, Ready};
+use futures::Future;
+
+use serde_json::value::Number;
