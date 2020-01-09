@@ -51,14 +51,14 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        // use actix_http::http::HeaderMap;
+
         let user_id;
         if req.path().starts_with("/api/")
             && !req.path().starts_with("/api/auth")
             && !req.path().starts_with("/api/public")
         {
             let auth = req.headers().get("Authentication");
-            // let authed;
+
             user_id = if auth.is_none() {
                 0
             } else {
@@ -78,14 +78,13 @@ where
         }else{
             user_id = 0;   
         }
-        println!("uid: {} authed", user_id);
+        // req.set_data_container(extensions: Rc<Extensions>)
+        // req.set_payload(user_id);
+        // req.app_data().
 
         let fut = self.service.call(req);
-        println!("service call completed");
         Box::pin(async move {
             let res = fut.await?;
-
-            println!("Hi from response");
             Ok(res)
         })
     }
@@ -100,4 +99,4 @@ use frank_jwt::{decode, Algorithm, ValidationOptions};
 use futures::future::{ok, Ready};
 use futures::Future;
 
-use serde_json::value::Number;
+use actix_http::Payload;
