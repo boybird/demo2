@@ -1,11 +1,13 @@
+### index
+GET https://localhost:8080/api/index
+
 ### users
 POST https://localhost:8080/api/users
 Content-Type: application/json
 
 {
     "page":1,
-    "num":2,
-    "name":"boy"
+    "num":10
 }
 
 ### register
@@ -23,6 +25,6 @@ POST https://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-    "name":"zxk7517",
+    "email":"zxk7517@qq.com",
     "password":"111111"
 }

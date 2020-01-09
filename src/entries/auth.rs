@@ -18,6 +18,7 @@ async fn register(db: Data<MysqlPool>, mut req: Json<Register>) -> impl Responde
         .values(&req.0)
         .execute(&conn)
         .expect("Error saving new post");
+    
 
     Json(req.0)
 }
@@ -41,7 +42,7 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         .expect("error find user");
 
     let secret = dotenv::var("secret").unwrap_or("secret123".to_owned());
-    let p1 = json!(1);
+    let p1 = json!(user.id);
     let header = json!({});
     let jwt1 = encode(header, &secret, &p1, Algorithm::HS256).unwrap();
 
