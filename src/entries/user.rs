@@ -13,21 +13,28 @@ async fn index(db: Data<MysqlPool>, req: Json<UserList>) -> impl Responder {
     let offset = (req.page - 1) * req.num;
 
     let limited = users.limit(req.num).offset(offset);
-    let data;
+    let list;
     let q_name;
+    let count;
     if req.name.is_some() && {
         q_name = req.name.as_ref().unwrap();
         q_name.len() > 0
     } {
         let q_name = req.name.as_ref().unwrap();
-        data = limited
+        list = limited
             .filter(name.like(format!("%{}%", q_name)))
             .load::<User>(&conn)
             .expect("error fetch data");
+        count = users.count().get_result(&conn).unwrap();
     } else {
-        data = limited.load::<User>(&conn).expect("error fetch data");
+        list = limited.load::<User>(&conn).expect("error fetch data");
+        count = users
+            .filter(name.like(format!("%{}%", q_name)))
+            .count()
+            .get_result(&conn)
+            .unwrap();
     }
-    Json(data)
+    crate::entries::Paged { list, count }
 }
 
 use actix_web::{

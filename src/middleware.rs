@@ -51,7 +51,6 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-
         let user_id;
         if req.path().starts_with("/api/")
             && !req.path().starts_with("/api/auth")
@@ -75,8 +74,8 @@ where
                 .map(|(_, num)| num.as_i64().unwrap_or(0))
                 .unwrap_or(0)
             };
-        }else{
-            user_id = 0;   
+        } else {
+            user_id = 0;
         }
         // req.set_data_container(extensions: Rc<Extensions>)
         // req.set_payload(user_id);
