@@ -40,11 +40,9 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         .get_result::<UserModel>(&conn)
         .expect("error find user");
 
-    // let secret = dotenv::var("secret").unwrap_or("secret123".to_owned());
-    let secret = JWT_SECRET.clone();
     let p1 = json!(user.id);
     let header = json!({});
-    let jwt1 = encode(header, &secret, &p1, Algorithm::HS256).unwrap();
+    let jwt1 = encode(header, &crate::JWT_SECRET, &p1, Algorithm::HS256).unwrap();
 
     if verify(req.0.password, &user.password).unwrap() {
         println!("登录成功")
@@ -70,5 +68,5 @@ use actix_web::{
 };
 use bcrypt::{hash, verify};
 use diesel::prelude::*;
-use frank_jwt::{decode, encode, Algorithm};
+use frank_jwt::{encode, Algorithm};
 use serde::{Deserialize, Serialize};

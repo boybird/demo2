@@ -7,6 +7,7 @@ pub struct UserList {
 
 #[post("/api/users")]
 async fn index(db: Data<MysqlPool>, req: Json<UserList>, identity: JwtIdentity) -> impl Responder {
+    println!("identity: {}", identity.id);
     use crate::schema::users::dsl::*;
     let conn = db.get().unwrap();
     let offset = (req.page - 1) * req.num;

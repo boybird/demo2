@@ -4,6 +4,7 @@ GET https://localhost:8080/api/index
 ### users
 POST https://localhost:8080/api/users
 Content-Type: application/json
+#Authentication: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.Ng.TYo79R2dPe7pTmlio6A_CllMV3Z5J8ULWJQZfe9-piY
 Authentication: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.Mg.ya8OU8cSS9oSB9x4JVUDoTqGC6F8HYbruK5rq8wmMAY
 
 {
@@ -16,8 +17,8 @@ POST https://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-    "name":"zxk7517",
-    "email":"zxk7517@qq.com",
+    "name":"zxk7518",
+    "email":"zxk7518@qq.com",
     "password":"111111"
 }
 
@@ -26,6 +27,6 @@ POST https://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-    "email":"zxk7517@qq.com",
+    "email":"zxk7518@qq.com",
     "password":"111111"
 }

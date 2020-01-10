@@ -1,12 +1,6 @@
 #![feature(type_name_of_val)]
-// include!(concat!(env!("OUT_DIR"), "/generated.rs"));
-// pub type MysqlPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
-
 pub type MysqlPool = diesel::r2d2::Pool<ConnectionManager<MysqlConnection>>;
-// TODO maybe lazy static here
-lazy_static! {
-    pub static ref JWT_SECRET: String = String::from("jwt123");
-}
+pub static JWT_SECRET: &'static str = include_str!(".jwt_secret");
 
 fn esteblish_connection() -> MysqlPool {
     let db_url: String = std::env::var("DATABASE_URL").expect("请设置数据库链接");
@@ -29,20 +23,14 @@ async fn main() -> std::io::Result<()> {
     builder.set_certificate_chain_file(ssl_cert).unwrap();
 
     HttpServer::new(move || {
-        // let generated = generate();
-        let jwt_auth = JwtAuth::new();
         App::new()
-            .wrap(jwt_auth)
-            // data
             .data(pool.clone())
             // routes
             .service(entries::home::index)
             .service(entries::user::index)
             .service(entries::auth::register)
             .service(entries::auth::login)
-        // .service(actix_web_static_files::ResourceFiles::new("", generated))
     })
-    //.bind(std::env::var("HOST_PORT").unwrap_or("127.0.0.1:8080".to_owned()))?
     .bind_openssl("127.0.0.1:8080", builder)?
     .run()
     .await
@@ -62,18 +50,12 @@ async fn main() -> std::io::Result<()> {
 extern crate diesel;
 #[macro_use]
 extern crate serde_json;
-#[macro_use]
-extern crate lazy_static;
 use actix_web::{App, HttpServer};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
 
-use middleware::JwtAuth;
-
-// use actix_web_static_files;
-// use std::collections::HashMap;
 
 mod entries;
 mod error;
