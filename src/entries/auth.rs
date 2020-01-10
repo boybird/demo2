@@ -60,7 +60,6 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
 use crate::models::user::User as UserModel;
 use crate::schema::users;
 use crate::MysqlPool;
-use crate::JWT_SECRET;
 use actix_web::{
     post,
     web::{Data, Json},
