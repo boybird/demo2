@@ -61,7 +61,6 @@ where
             user_id = if auth.is_none() {
                 0
             } else {
-                use crate::JWT_SECRET;
                 let secret = JWT_SECRET.clone();
                 let auth = auth.unwrap().to_str().unwrap();
                 decode(
@@ -89,11 +88,45 @@ where
     }
 }
 
+#[derive(Debug)]
+pub struct JwtIdentity{pub id: i64}
+
+impl FromRequest for JwtIdentity {
+    type Config = ();
+    type Error = actix_http::error::Error;
+    type Future = Ready<Result<Self, Error>>;
+
+    #[inline]
+    fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
+        let secret = JWT_SECRET.clone();
+        let auth = req.headers().get("Authentication");
+        let id = match auth {
+            Some(auth_head) => {
+                let auth = auth_head.to_str().unwrap();
+                decode(
+                    auth,
+                    &secret,
+                    Algorithm::HS256,
+                    // TODO remove dangerous validate
+                    &ValidationOptions::dangerous(),
+                )
+                .map(|(_, num)| num.as_i64().unwrap_or(0))
+                .unwrap_or(0)
+            }
+            None => 0,
+        };
+ 
+        ok(JwtIdentity{id})
+    }
+}
+
+use crate::JWT_SECRET;
+
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
 use actix_service::{Service, Transform};
-use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
+use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error, FromRequest, HttpRequest};
 use frank_jwt::{decode, Algorithm, ValidationOptions};
 use futures::future::{ok, Ready};
 use futures::Future;
