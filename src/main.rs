@@ -13,14 +13,14 @@ fn esteblish_connection() -> MysqlPool {
 async fn main() -> std::io::Result<()> {
     let _ = dotenv::dotenv();
     let pool = esteblish_connection();
-    let ssl_key = std::env::var("SSL_KEY_PATH").unwrap_or("key.pm".to_owned());
-    let ssl_cert = std::env::var("SSL_CERT_PATH").unwrap_or("cert.pem".to_owned());
+    //let ssl_key = std::env::var("SSL_KEY_PATH").unwrap_or("key.pm".to_owned());
+    //let ssl_cert = std::env::var("SSL_CERT_PATH").unwrap_or("cert.pem".to_owned());
 
-    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
-    builder
-        .set_private_key_file(ssl_key, SslFiletype::PEM)
-        .unwrap();
-    builder.set_certificate_chain_file(ssl_cert).unwrap();
+    //let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    //builder
+    //    .set_private_key_file(ssl_key, SslFiletype::PEM)
+    //    .unwrap();
+    //builder.set_certificate_chain_file(ssl_cert).unwrap();
 
     HttpServer::new(move || {
         App::new()
@@ -31,7 +31,8 @@ async fn main() -> std::io::Result<()> {
             .service(entries::auth::register)
             .service(entries::auth::login)
     })
-    .bind_openssl("127.0.0.1:8080", builder)?
+    .bind("127.0.0.1:8080")?
+    //.bind_openssl("127.0.0.1:8080", builder)?
     .run()
     .await
 }
