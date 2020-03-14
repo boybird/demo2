@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 actix-web = {version= "2.0", features = ["openssl"] }
 actix-rt = "1.0"
-actix-web-static-files = "0.3"
+actix-web-static-files = "2.0.0"
 openssl = { version = "0.10", features = ["v110"] }
 
 futures = "0.3"
@@ -29,5 +29,5 @@ diesel = {version = "1.4", features = ["mysql","r2d2"]}
 # r2d2="0.8"
 
 [build-dependencies]
-actix-web-static-files = "0.3"
+actix-web-static-files = "2.0.0"
 
