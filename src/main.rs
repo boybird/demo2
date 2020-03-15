@@ -52,11 +52,11 @@ extern crate diesel;
 #[macro_use]
 extern crate serde_json;
 use actix_web::{App, HttpServer};
-use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+// use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+// use anyhow::{Context, Result};
 
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
-
 
 mod entries;
 mod error;
