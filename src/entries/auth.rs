@@ -39,14 +39,13 @@ async fn login(db: Data<MysqlPool>, req: Json<Login>) -> impl Responder {
         .filter(email.eq(req.0.email))
         .get_result::<UserModel>(&conn)
         .expect("error find user");
-
+    let password_failed_err: &'static str = "password unmatched";
+    if !verify(req.0.password, &user.password).unwrap() {
+        return Json(json!({ "msg": password_failed_err }));
+    }
     let p1 = json!(user.id);
     let header = json!({});
     let jwt1 = encode(header, &crate::JWT_SECRET, &p1, Algorithm::HS256).unwrap();
-
-    if verify(req.0.password, &user.password).unwrap() {
-        println!("登录成功")
-    }
 
     Json(json!(
         {
